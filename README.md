@@ -1,5 +1,6 @@
 # Boats-Problem
-Load distribution problem for different cargo weights 
+Load distribution problem for different cargo weights.
+
 There are seven loads as follows: 220  130  120  100  90  90  60  
 and two boats that each can hold a maximum cargo of 300. 
 
