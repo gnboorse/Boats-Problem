@@ -6,9 +6,13 @@
 /* written for C Programming Term Project, G. N. Boorse
 
  - const variables are program inputs and can be set to any
-valid numbers.
+ valid numbers and recompiled for different limit, load, and boat
+ values
 
- - 
+ - uses bitwise operators to compute all combinations of 
+ loads and chooses largest possible sums less than 
+ BOAT_CARRY_LIMIT. Eliminates sums already used after each
+ main iteration. 
 
 */
 
@@ -20,7 +24,7 @@ const int BOAT_CARRY_LIMIT = 300;
 // 2^NUM_LOADS > sizeof(int)
 const int NUM_LOADS = 10; 
 
-const int NUM_BOATS = 4;
+const int NUM_BOATS = 5;
 
 const int LOADS[10] = {220,170,130,130,120,120,100,90,90,60};
 
