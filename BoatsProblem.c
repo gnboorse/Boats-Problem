@@ -1,27 +1,29 @@
 #include <stdio.h>
+#include <math.h>
+
+
 
 /* written for C Programming Term Project, G. N. Boorse
 
-This program solves for the optimal load configuration
-by incrementing a variable m from 0 to 127 and using
-the binary representation of that m to indicate which
-indices to select for the sum from the LOADS array.
+ - const variables are program inputs and can be set to any
+valid numbers.
 
-For instance, when m = 96 (or 0b1100000), the 
-algorithm will select the first two items from the
-LOADS array. When m = 100 (0b1100100) the first two
-and the fifth. This is an easy way of getting the
-combinations of all of the cargo loads.
-
-The boat_ms and boat_sums arrays keep track of which 
-m and sum values have been achieved before, making sure
-the algorithm can't find the same value twice.
+ - 
 
 */
+
+
 //constants
 const int BOAT_CARRY_LIMIT = 300;
-const int NUM_LOADS = 7;
-const int LOADS[7] = {220,130,120,100,90,90,60};
+
+//have to be careful that this is not greater than:
+// 2^NUM_LOADS > sizeof(int)
+const int NUM_LOADS = 10; 
+
+const int NUM_BOATS = 4;
+
+const int LOADS[10] = {220,170,130,130,120,120,100,90,90,60};
+
 
 //prototypes for later
 void displaySum(int m);
@@ -32,29 +34,41 @@ int kthBitOfN(int k, int n);
 void main()
 {	
 	//some declarations
-	int boat_ms[2] = {0, 0};
-	int boat_sums[2] = {0, 0};
+	int boat_ms[NUM_BOATS];
+	int boat_sums[NUM_BOATS];
 	
+	//main iterator value
+	int i;
+	
+	//first zero fill both lists
+    for (i = 0; i < NUM_BOATS; i++)
+    {
+        boat_ms[i] = 0;
+        boat_sums[i] = 0;
+    }	
+	
+	//this keeps track of the current smallest difference between
+	//a running sum and the previous difference
+	//set to be the smallest item in the list to begin with
 	int lowest_difference = LOADS[NUM_LOADS-1];
 	
-	//loop over both boats
-	int i;
-	for (i = 0; i < 2; i++)
+	//loop over the boats
+	for (i = 0; i < NUM_BOATS; i++)
 	{
 		//highest sum and m value for this loop
 		int highest_sum = 0;
 		int highest_m = 0;
 		int m; //loop over all of the ms
-		for (m = 0; m < 128; m++)
+		for (m = 0; m < (1 << NUM_LOADS); m++) // (1 << NUM_LOADS) == 2 ^ NUM_LOADS
 		{
 			
 			//1. perform a check as to whether or not we've used any
 			//   part of this solution m before.
 			
-			int can_use = 1; 
+			int can_use = 1; //boolean value of what we can do here
 			
 			int c;
-			for (c = 0; c < 2; c++) 
+			for (c = 0; c < NUM_BOATS; c++) 
 			{
 				//this is a simple check to see if any bits are shared
 				//between any previous m values and the current one
@@ -87,9 +101,9 @@ void main()
 				}
 			}
 		}
-		printf("For boat %i, best solution is: ", i+1);
-		displaySum(highest_m);
-		boat_ms[i] = highest_m;
+		printf("For boat %i, best solution is: ", i+1); //print output here
+		displaySum(highest_m); //nice display of boat loads
+		boat_ms[i] = highest_m; //set new boat_ms and boat_sums
 		boat_sums[i] = highest_sum;
 	}
 	
